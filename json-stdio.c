@@ -26,14 +26,16 @@
 
 #include "json-stdio.h"
 
-//TODO: handle errors and malformed input
-//TODO: handle locales
+/* TODO: handle errors and malformed input
+ * TODO: handle locales
+ * TODO: prettify
+ */
 
-// works with any POSIX compliant character set
-// NB! evaluates c more than once
+/* works with any POSIX compliant character set
+ * NB! evaluates c more than once
+ */
 #define	JSON_HEXDIGIT_DECODE_(c)	(isdigit(c) ? c - '0' : tolower(c) - 'a' + 0xa)
 
-//TODO: prettify
 enum json_type
 json_gettype(FILE *stream)
 {
@@ -57,14 +59,14 @@ json_gettype(FILE *stream)
 	case '"':
 		return type | json_type_string;
 	case 'f':
-		getc(stream); //a
+		getc(stream); /* a */
 		type |= json_type_false;
 	case 't':
 		type |= json_type_true;
 	case 'n':
-		getc(stream); //l, r, u
-		getc(stream); //s, u, l
-		getc(stream); //e, e, l
+		getc(stream); /* l, r, u */
+		getc(stream); /* s, u, l */
+		getc(stream); /* e, e, l */
 		return type | json_type_null;
 	case ']':
 		type = json_typeflag_end;

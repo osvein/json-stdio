@@ -46,7 +46,7 @@ enum json_type {
 	json_typeflag_pair	= 010,
 
 	/* the token is the end of a value (array and object only) */
-	json_typeflag_end	= 020,
+	json_typeflag_end	= 020
 }	json_gettype(FILE *);
 json_number	json_getnumber(FILE *);
 int	json_getc(FILE *);
