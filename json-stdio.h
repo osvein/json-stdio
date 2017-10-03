@@ -22,10 +22,10 @@
  */
 
 #ifndef	JSON_NUMBER_TYPE
-#define	JSON_NUMBER_TYPE	long double
+#define	JSON_NUMBER_TYPE	float
 #endif
 #ifndef	JSON_NUMBER_FORMAT
-#define	JSON_NUMBER_FORMAT	"%Lf"
+#define	JSON_NUMBER_FORMAT	"%f"
 #endif
 
 typedef	JSON_NUMBER_TYPE	json_number;
