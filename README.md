@@ -72,9 +72,10 @@ your stdio stream to `json_gettoken()`.
 The `json_gettoken()` function attempts to get the next token in `stream`.
 
 ## RETURN VALUE
-The `json_gettoken()` function returns a **json_token** structure with the `type`
-member set to an `enum json_type` enumeral representing the type of the next
-token, or `json_type_eof` if the stream is at end-of-file or a read error
+The `json_gettoken()` function returns a **json_token** structure with the
+`type` member set to an **enum json_type** enumeral representing the type of the
+next token, or `json_type_eof` if the stream is at end-of-file or a read error
 occurs. If the token is a JSON number value token, it is converted to a
-`json_number` and stored in the `data.num` member. If the token is a JSON string
-value token, the next character of the string is stored in the `data.c` member.
+**json_number** and stored in the `data.num` member. If the token is a JSON
+string value token, the next character of the string is stored in the `data.c`
+member. Any JSON character escape sequence is converted.
