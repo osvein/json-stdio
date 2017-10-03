@@ -6,7 +6,6 @@ Lightweight JSON lexer using C stdio streams
 	-	ANSI C
 	-	2 files ([1 source](json-stdio.c) + [1 header](json-stdio.h))
 	-	~120 lines of code
-	-	stdio-like interface
 	-	single function
 	-	doesn't require initialization
 -	operates on unbuffered and unseekable streams of JSON data
@@ -45,7 +44,7 @@ following members:
 json_type_eof      Indicates an end-of-file condition.
 json_type_null     Indicates a JSON null value token.
 json_type_true     Indicates a JSON true value token.
-json_type_false    Indicates a JSON true value token.
+json_type_false    Indicates a JSON false value token.
 json_type_number   Indicates a JSON number value token.
 json_type_string   Indicates a JSON string value token.
 json_type_array    Indicates a JSON array value opening token.
@@ -76,6 +75,7 @@ The `json_gettoken()` function returns a **json_token** structure with the
 `type` member set to an **enum json_type** enumeral representing the type of the
 next token, or `json_type_eof` if the stream is at end-of-file or a read error
 occurs. If the token is a JSON number value token, it is converted to a
-**json_number** and stored in the `data.num` member. If the token is a JSON
-string value token, the next character of the string is stored in the `data.c`
-member. Any JSON character escape sequence is converted.
+**json_number** using the `scanf` format the `JSON_NUMBER_FORMAT` macro expands
+to, and stored in the `data.num` member. If the token is a JSON string value
+token, the next character of the string is stored in the `data.c` member. Any
+JSON character escape sequence is converted.
