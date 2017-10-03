@@ -35,10 +35,10 @@ struct json_token json_gettoken(FILE *stream);
 The `"json-stdio.h"` header defines the `JSON_NUMBER_TYPE` and
 `JSON_NUMBER_FORMAT` macros if they are undefined.
 
-The `"json-stdio.h"` header defines the `json_number` type through typedef as
+The `"json-stdio.h"` header defines the **json_number** type through typedef as
 the expansion of the `JSON_NUMBER_TYPE` macro.
 
-The `"json-stdio.h"` header defines the `json_type` enumeration with the
+The `"json-stdio.h"` header defines the **json_type** enumeration with the
 following members:
 ```C
 json_type_eof      Indicates an end-of-file condition.
@@ -57,7 +57,7 @@ json_typeflag_end  Indicates that the token is a closing token (of a string,
                    array or object value).
 ```
 
-The `"json-stdio.h"` header defines the `json_token` structure with the
+The `"json-stdio.h"` header defines the **json_token** structure with the
 following members:
 ```C
 enum json_type type     The type of the token
