@@ -31,128 +31,88 @@
  * TODO: prettify
  */
 
-/* works with any POSIX compliant character set
- * NB! evaluates c more than once
- */
-#define	JSON_HEXDIGIT_DECODE_(c)	(isdigit(c) ? c - '0' : tolower(c) - 'a' + 0xa)
-
-enum json_type
-json_gettype(FILE *stream)
+struct json_token
+json_gettoken(FILE *stream)
 {
 	int	c;
-	enum json_type	type	= (enum json_type)0;
+	struct json_token	token	= { (enum json_type)0 };
 
 	while ((c = getc(stream)) != EOF) {
 		if (c == ':') {
-			type = json_typeflag_pair;
+			token.type = json_typeflag_pair;
 		} else if (c != ',' && !isspace(c)) {
 			break;
 		}
 	}
 
 	switch (c) {
-	default:
-		if (!isdigit(c)) break;
-	case '-':
-		ungetc(c, stream);
-		return type | json_type_number;
 	case '"':
-		return type | json_type_string;
-	case 'f':
-		getc(stream); /* a */
-		type |= json_type_false;
-	case 't':
-		type |= json_type_true;
-	case 'n':
-		getc(stream); /* l, r, u */
-		getc(stream); /* s, u, l */
-		getc(stream); /* e, e, l */
-		return type | json_type_null;
-	case ']':
-		type = json_typeflag_end;
-	case '[':
-		return type | json_type_array;
-	case '}':
-		type = json_typeflag_end;
-	case '{':
-		return type | json_type_object;
-	}
-
-	return json_type_eof;
-}
-
-json_number
-json_getnumber(FILE *stream)
-{
-	json_number	num	= 0;
-
-	fscanf(stream, JSON_NUMBER_FORMAT, &num);
-	return num;
-}
-
-int
-json_getc(FILE *stream)
-{
-	int	c;
-
-	switch (c = getc(stream)) {
-	case EOF:
-	case '"':
-		return EOF;
-	case '\\':
 		switch (c = getc(stream)) {
-			int	d, e;
+		case '"':
+			token.type |= json_typeflag_end;
+			break;
+		case '\\':
+			switch (c = getc(stream)) {
+				int	d, e;
 
-		case 'b':
-			c = '\b';
-			break;
-		case 'f':
-			c = '\f';
-			break;
-		case 'n':
-			c = '\n';
-			break;
-		case 'r':
-			c = '\r';
-			break;
-		case 't':
-			c = '\t';
-			break;
-		case 'u':
-			d = getc(stream);
-			e = getc(stream);
-			c = (JSON_HEXDIGIT_DECODE_(d) << 4)
-				| JSON_HEXDIGIT_DECODE_(e);
+			case 'b':
+				c = '\b';
+				break;
+			case 'f':
+				c = '\f';
+				break;
+			case 'n':
+				c = '\n';
+				break;
+			case 'r':
+				c = '\r';
+				break;
+			case 't':
+				c = '\t';
+				break;
+			/* TODO: \u */
+			}
+		default:
+			token.data.c = c;
 
 			/* NB!
 			 * the use of the term 'push back' in the POSIX standard in makes
 			 * it unclear whether the character passed to ungetc must originate
-			 * from the stream
+			 * from the stream, so the following might not be POSIX conforming.
 			 */
-			d = getc(stream);
-			e = getc(stream);
-			ungetc((JSON_HEXDIGIT_DECODE_(d) << 4)
-				| JSON_HEXDIGIT_DECODE_(e), stream);
-
-			break;
+			ungetc('"', stream);
 		}
+		token.type |= json_type_string;
+		break;
+	case 'f':
+		getc(stream); /* a */
+		token.type |= json_type_false;
+	case 't':
+		token.type |= json_type_true;
+	case 'n':
+		getc(stream); /* l, r, u */
+		getc(stream); /* s, u, l */
+		getc(stream); /* e, e, l */
+		token.type |= json_type_null;
+		break;
+	case ']':
+		token.type = json_typeflag_end;
+	case '[':
+		token.type |= json_type_array;
+		break;
+	case '}':
+		token.type = json_typeflag_end;
+	case '{':
+		token.type |= json_type_object;
+		break;
+	default:
+		if (!isdigit(c)) break;
+	case '-':
+		ungetc(c, stream);
+		fscanf(stream, JSON_NUMBER_FORMAT, &token.data.num);
+		token.type |= json_type_number;
 		break;
 	}
 
-	return c;
-}
-
-char
-*json_gets(char *s, int n, FILE *stream)
-{
-	int	i;
-
-	for (i = 0; i < n; i++) {
-		int	c = json_getc(stream);
-
-		if (c == EOF) break;
-		s[i] = c;
-	}
-	s[i] = '\0';
-	return s;
+	return token;
 }

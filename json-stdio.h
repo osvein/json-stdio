@@ -30,24 +30,27 @@
 
 typedef	JSON_NUMBER_TYPE	json_number;
 
-/* changing the values will mess up the case fallthroughs */
-enum json_type {
-	json_type_eof	= 0,
-	json_type_null	= 1,
-	json_type_true	= 3, /* (json_type_null << 1) | 1; */
-	json_type_false	= 7, /* (json_type_true << 1) | 1; */
-	json_type_number	= 2,
-	json_type_string	= 4,
-	json_type_array	= 5,
-	json_type_object	= 6,
-	json_typemask	= 7,
+struct json_token {
+	/* changing the values will mess up the case fallthroughs */
+	enum json_type {
+		json_type_eof	= 0,
+		json_type_null	= 1,
+		json_type_true	= 3, /* (json_type_null << 1) | 1; */
+		json_type_false	= 7, /* (json_type_true << 1) | 1; */
+		json_type_number	= 2,
+		json_type_string	= 4,
+		json_type_array	= 5,
+		json_type_object	= 6,
+		json_typemask	= 7,
 
-	/* the token is part of the right-hand side of an object member */
-	json_typeflag_pair	= 010,
+		/* the token is part of the right-hand side of an object member */
+		json_typeflag_pair	= 010,
 
-	/* the token is the end of a value (array and object only) */
-	json_typeflag_end	= 020
-}	json_gettype(FILE *);
-json_number	json_getnumber(FILE *);
-int	json_getc(FILE *);
-char	*json_gets(char *, int, FILE *);
+		/* the token is the end of a value (array and object only) */
+		json_typeflag_end	= 020
+	} type;
+	union {
+		char c;
+		json_number num;
+	} data;
+}	json_gettoken(FILE *);
