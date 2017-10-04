@@ -24,7 +24,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include "json-stdio.h"
+#include "json.h"
 
 /* TODO: handle errors and malformed input
  * TODO: handle locales

@@ -4,7 +4,7 @@ Lightweight JSON lexer using C stdio streams
 ## Features
 -	simple
 	-	ANSI C
-	-	2 files ([1 source](json-stdio.c) + [1 header](json-stdio.h))
+	-	2 files ([1 source](json.c) + [1 header](json.h))
 	-	~120 lines of code
 	-	single function
 	-	doesn't require initialization
@@ -26,19 +26,19 @@ Lightweight JSON lexer using C stdio streams
 ## SYNOPSIS
 ```C
 #include <stdio.h>
-#include "json-stdio.h"
+#include "json.h"
 
 struct json_token json_gettoken(FILE *stream);
 ```
 
 ## DESCRIPTION
-The `"json-stdio.h"` header defines the `JSON_NUMBER_TYPE` and
+The *json.h* header defines the `JSON_NUMBER_TYPE` and
 `JSON_NUMBER_FORMAT` macros if they are undefined.
 
-The `"json-stdio.h"` header defines the **json_number** type through typedef as
+The *json.h* header defines the **json_number** type through typedef as
 the expansion of the `JSON_NUMBER_TYPE` macro.
 
-The `"json-stdio.h"` header defines the **json_type** enumeration with the
+The *json.h* header defines the **json_type** enumeration with the
 following members:
 ```C
 json_type_eof      Indicates an end-of-file condition.
@@ -57,7 +57,7 @@ json_typeflag_end  Indicates that the token is a closing token (of a string,
                    array or object value).
 ```
 
-The `"json-stdio.h"` header defines the **json_token** structure with the
+The *json.h* header defines the **json_token** structure with the
 following members:
 ```C
 enum json_type type     The type of the token
