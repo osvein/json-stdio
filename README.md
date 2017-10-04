@@ -1,6 +1,9 @@
 # json-stdio
 Lightweight JSON lexer using C stdio streams
 
+If you are going to use json-stdio as a git submodule, the `bare` branch
+has everything you need, without the examples etc.
+
 ## Features
 -	simple
 	-	ANSI C
